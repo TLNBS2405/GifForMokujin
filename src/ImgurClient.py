@@ -8,19 +8,19 @@ class ImgurClient:
         self.ic = Imgur({'client_id': client_id, 'access_token': access_token})
 
     def create_album(self, name: str):
+        print("creating album: ", name)
         album = self.ic.album_create([], name, '', 'public')
         album_id = album['response']['data']['id']
         return album_id
 
     def upload_gif(self, path: str, title: str = None, desc: str = None, album_hash: str = None):
-        print("uploading " + path)
+        print("uploading ",path)
         response = self.ic.image_upload(filename=path, title=title, description=desc, album=album_hash)
         return response
 
     def upload_folder(self, path: str):
         error_status = {}
-        album_name = path.split("/")[-1]
-
+        album_name = path.split("\\")[-1]
         album_id = self.create_album(album_name)
 
         all_files = glob.glob(path + "\\*")
