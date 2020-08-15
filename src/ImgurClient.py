@@ -1,21 +1,32 @@
 from imgur_python import Imgur
-
-
+import glob
 
 class ImgurClient:
 
     def __init__(self, client_id, access_token):
-        self.client_id = client_id
-        self.access_token = access_token
+        self.ic = Imgur({'client_id': client_id, 'access_token': access_token})
 
-    def createAlbum(self, name: str):
-        print("")
+    def create_album(self, name: str):
 
-    def uploadGif(self, path: str, album_hash: str = None):
+        album =  self.ic.album_create([], name, '', 'public')
+        print(album)
+        album_id = album['response']['data']['id']
+        return album_id
 
-        ic = Imgur({'client_id': self.client_id, 'access_token': self.access_token})
-        response = ic.image_upload(path, 'Untitled', 'My first image upload', album=album_hash)
+    def upload_gif(self, path: str, title: str = None, desc : str = None, album_hash: str = None):
+
+        response = self.ic.image_upload(path, title, desc, album=album_hash)
         return response
 
-    def uploadFolder(self, path: str):
-        print("")
+    def upload_folder(self, path: str):
+        all_status = []
+        last_part = path.split("/")[-1]
+
+        album_id = self.create_album(last_part)
+
+        all_files = glob.glob(path+"\\*")
+        for file in all_files:
+            status = self.upload_gif(file,album_hash=album_id)["status"]
+            all_status.append(status)
+        return all_status
+
