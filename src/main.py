@@ -10,7 +10,7 @@ with open("config.json") as config_json:
 
 dirname=""
 
-ic = ImgurClient.ImgurClient(config_data["client_ID"], config_data["access_token"])
+ic = ImgurClient.ImgurClient(config_data["imgur_client_id"], config_data["imgur_access_token"])
 root = tk.Tk()
 style = ttk.Style(root)
 style.theme_use("alt")
