@@ -1,4 +1,6 @@
 {
-  "access_token": "",
-  "client_ID": ""
+  "imgur_access_token": "",
+  "imgur_client_id": "",
+  "gfycat_client_id": "",
+  "gfycat_client_secret": ""
 }
