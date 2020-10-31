@@ -1,6 +1,6 @@
 from imgur_python import Imgur
-import glob
-
+import glob, time
+import ctypes
 
 class ImgurClient:
 
@@ -26,7 +26,17 @@ class ImgurClient:
         all_files = glob.glob(path + "\\*")
         for file in all_files:
             file_name = file.split("\\")[-1]
-            status = self.upload_gif(path=file, title=file_name, album_hash=album_id)["status"]
-            if status != 200:
-                error_status[file] = status
+            status = self.upload_gif(path=file, title=file_name, album_hash=album_id)
+            if status["status"] != 200:
+                msg = {"status": status, "file": file_name, "next": "retry upload in an hour" }
+                ctypes.windll.user32.MessageBoxW(0, msg, "Error", 1)
+                time.sleep(3600)
+
+                status = self.upload_gif(path=file, title=file_name, album_hash=album_id)
+                if status["status"] == 200:
+                    msg = f'File {file_name} upload successfully continued'
+                    ctypes.windll.user32.MessageBoxW(0, msg, "OK", 1)
+                    error_status[file] = status
+
+
         return error_status
